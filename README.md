@@ -3,7 +3,7 @@ Install
 
 This application is optimized to work in Python3, check to see if you have python3 on your host
 
-python3 --version
+``python3 --version``
 
 Make sure you have the following python3 packages
 pymongo, flask, jwt, authlib, python-dotenv
