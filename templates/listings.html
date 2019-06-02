@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <title>AMK Properties</title>
+        
+        <meta charset="utf-8" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="AMK Bookstore" />
+        <meta name="author" content="Karthik Ramasamy" />
+        
+        <link rel="icon" href="/favicon.ico" />
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/resources/css/default.css" />
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    </head>
+    <style>
+        .image {
+            width: 50px;
+            height: 50px;
+        }
+        table, td {
+            border: 1px solid black;
+        }
+        .bg-light {
+            opacity: .7;
+        }
+    </style>
+    <body>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-light">
+                    <a style="color: black" class="navbar-brand" href="/"><img class="companylogo hidden-xs" alt="" src="/static/logo.png" />AMK Properties</a>
+            
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                          <a class="nav-link" href="/"><span class="fas fa-home"></span></a>
+                        </li>
+                      </ul>
+                    </div>
+            
+                    {% if userinfo %}
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="nav-item">
+                                    <a style="padding-top: 14px; color:black" class="nav-link" href="/logout"><span class="fas fa-signout-alt"></span> Logout</a>
+                            </li>
+                            <li><div class="photo-outer hidden-xs"><img style="height:50px; border-radius: 10px" class="user-photo" src="{{userinfo['picture']}}" alt="{{userinfo['name']}}" title="{{userinfo['name']}}" /></div></li>
+                        </ul>
+                    {% endif %}
+            
+                    {% if not userinfo %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                                <a class="nav-link" href="/login"><span class="fas fa-signin-alt"></span> Login</a>
+                        </li>
+                    </ul>
+                {% endif %}
+                  </nav>
+        <table style="padding-top: 50px">
+            <thead>
+                <th>Picture</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Address</th>
+            </thead>
+            {% for row in rows %}
+                <tr>
+                    <td onclick=window.location="{{ url_for('listing_details', listing_id = row[4]) }}"><img class="image" src="{{ row[0] }}"></td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+
+</html>

@@ -1,0 +1,33 @@
+<html>
+    <style>
+        table, td, th {
+            border: 1px solid black;
+        }
+
+        td {
+            vertical-align: top;
+        }
+    </style>
+    <body>
+        <table>
+            <thead>
+                {% for header in imageheaders %}
+                <th>{{ header }}</th>
+                {% endfor %}
+
+                {% for header in headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </thead>
+                <tr>
+                    {% for image in images %}
+                    <td><img class="image" src="{{ image }}"></td>
+                    {% endfor %}
+                    {% for item in row %}
+                    <td>{{ item }}</td>
+                    {% endfor %}
+                </tr>
+        </table>
+    </body>
+
+</html>

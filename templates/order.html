@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <title>AMK Bookstore</title>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AMK Bookstore" />
+  <meta name="author" content="Karthik Ramasamy" />
+
+  <link rel="icon" href="/favicon.ico" />
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" type="text/css" href="/static/resources/css/default.css" />
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+  
+</head>
+
+<body>
+  <div class="container">
+    <div class="container">
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="/"><img class="companylogo hidden-xs" alt="Logo" src="/static/logo.png" />Bookstore</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/"><span class="fas fa-home"></span></a>
+            </li>
+          </ul>
+        </div>
+
+        {% if userinfo %}
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">
+                        <a class="nav-link" href="/logout"><span class="fas fa-signout-alt"></span> Logout</a>
+                </li>
+                <li><div class="photo-outer hidden-xs"><img class="user-photo" src="{{userinfo['picture']}}" alt="{{userinfo['name']}}" title="{{userinfo['name']}}" /></div></li>
+            </ul>
+        {% endif %}
+
+        {% if not userinfo %}
+          <ul class="nav navbar-nav navbar-right">
+              <li class="nav-item">
+                      <a class="nav-link" href="/login"><span class="fas fa-signin-alt"></span> Login</a>
+              </li>
+          </ul>
+        {% endif %}
+      </nav>
+
+      <div class="container">
+        <br/>
+        <br/>
+        <h3>Bookstore Order Page</h3>
+        <br />
+
+        <div id="orderDiv">
+          <h4>Select the number of books you want to order and submit to place a order.</h4>
+
+          <br />
+          <div id="dataTableDiv"></div>
+          <br />
+          <input id="btnPlaceOrder" type="button" onclick="placeOrder()" value="Place Order"/>
+        </div>
+
+        <div id="orderStatusDiv"></div>
+        
+        <script>
+          var table, token;
+          $(document).ready(function(){
+            $.ajax({
+                  url: "api/v1/books",
+                  dataType: 'json',
+                  method: 'GET',
+                  success: function(myBooks){
+                      createTableFromJSON(myBooks);
+                  },
+                  error: function(){
+                      alert("error occurred while retrieving the books.");
+                  },
+              });
+              
+          });
+
+          function createTableFromJSON(myBooks) {
+              var col = [];
+              for (var i = 0; i < myBooks.length; i++) {
+                  for (var key in myBooks[i]) {
+                      if (col.indexOf(key) === -1) {
+                          col.push(key);
+                      }
+                  }
+              }
+              col.push('quantity');
+              table = document.createElement("table");
+              table.className="table table-striped table-hover";
+      
+              var tr = table.insertRow(-1);                   
+      
+              for (var i = 0; i < col.length; i++) {
+                  var th = document.createElement("th");
+                  th.innerHTML = col[i];
+                  tr.appendChild(th);
+              }
+
+              for (var i = 0; i < myBooks.length; i++) {
+      
+                  tr = table.insertRow(-1);
+                  for (var j = 0; j < col.length-1; j++) {
+                      var tabCell = tr.insertCell(-1);
+                      tabCell.innerHTML = myBooks[i][col[j]];
+                  }
+                  var input = document.createElement("input");
+                  tr.insertCell(-1).appendChild(input);
+                  input.classList.add('hide');
+              }
+      
+              var divContainer = document.getElementById("dataTableDiv");
+              divContainer.innerHTML = "";
+              divContainer.appendChild(table);
+          }
+
+          function placeOrder (){
+              var orderPlaced = tableToJson();
+              $.ajax({
+                  url: "/api/v1/orders",
+                  data: JSON.stringify(orderPlaced),
+                  dataType: 'json',
+                  method: 'POST',
+                  success: function(order){
+                      showStatus(order);
+                  },
+                  error: function(){
+                      alert("error occurred while placing the order.");
+                  },
+              });
+          }
+
+          function tableToJson() {
+              var data = {}; // first row needs to be headers
+              var headers = [];
+              for (var i=0; i<table.rows[0].cells.length; i++) {
+                  headers[i] = table.rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi,'');
+              }
+              // go through cells
+              data[ 'customer_id' ] = "{{userid}}";
+              var items = [];
+              for (var i=1; i<table.rows.length; i++) {
+                  var tableRow = table.rows[i];
+                  var rowData = {};
+                  for (var j=0; j<tableRow.cells.length; j++) {
+                      if(headers[j] === 'quantity' && tableRow.cells[j].childNodes[0].value > 0) {
+                          rowData[ 'book_id' ] = tableRow.cells[0].innerHTML;
+                          rowData[ 'qty' ] = tableRow.cells[j].childNodes[0].value;
+                          items.push(rowData);
+                      }
+                  }
+              }
+              data['items'] = items;
+              return data;
+          }
+
+          function showStatus(order) {
+            var orderStatus = order['status'];
+            var orderId = order['_id'];
+            var statusMessageHtml =  "<h4>Your order has been placed.</h4> <br/> <br/> <h5>Order Status: " + orderStatus + "</h5> <br/> <h5>Order ID: " + orderId + "</h5><br/>";
+            document.getElementById("orderDiv").style.display = "none";
+            var divContainer = document.getElementById("orderStatusDiv");
+            divContainer.innerHTML = statusMessageHtml;
+          }
+
+        </script>
+
+      </div>
+    </div>
+  </div>
+
+  <br />
+  <br />
+
+  <footer>
+    <div id="footer" class="container text-muted" align="center">
+      © 2019 | Developed and supported by Team AMK
+      <br />
+    </div>
+  </footer>
+</body>
+
+</html>
