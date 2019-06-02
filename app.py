@@ -191,25 +191,35 @@ reviews = db['reviews']
 home_listings = db['listings']
 calendar = db['calendar']
 
-
 @app.route("/listings")
-@requires_auth
 def listings():
+    return redirect(url_for("houselistings", pagenumber=1))
+
+
+@app.route("/houselistings/<pagenumber>")
+@requires_auth
+def houselistings(pagenumber=1):
     rows = []
+    start = int(pagenumber)*20 - 20
+    count = 0
     for document in home_listings.find({}):
-        temprow = []
-        temprow.append(document["picture_url"])
-        temprow.append(document["name"])
-        temprow.append(document["price"])
-        temprow.append(document["street"])
-        temprow.append(document["id"])
-        rows.append(temprow)
+        if count>=start:
+            temprow = []
+            temprow.append(document["picture_url"])
+            temprow.append(document["name"])
+            temprow.append(document["price"])
+            temprow.append(document["street"])
+            temprow.append(document["id"])
+            rows.append(temprow)
+        if count==start+20:
+            break
+        count+=1
     rows.pop(0)
     user_id = session[constants.JWT_PAYLOAD].get('sub', '0|0').split("|")[1]
     return render_template("listings.html", rows=rows, userinfo=session[constants.PROFILE_KEY], userid=user_id)
 
 
-@app.route("/listings/<listing_id>")
+@app.route("/listing/<listing_id>")
 @requires_auth
 def listing_details(listing_id):
     home = home_listings.find({"id" : int(listing_id) })[0]
