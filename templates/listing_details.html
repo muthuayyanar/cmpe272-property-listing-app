@@ -7,27 +7,34 @@
         td {
             vertical-align: top;
         }
+        .picture {
+            border-radius: 10px;
+            float: right;
+            height: 500px;
+            width: 60%;
+        }
+        .name {
+            background-color: #EEEEEE;
+            float: left;
+            height: 460px;
+            width: 36%;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        name {
+            font-size: 81px
+        }
     </style>
     <body>
-        <table>
-            <thead>
-                {% for header in imageheaders %}
-                <th>{{ header }}</th>
-                {% endfor %}
-
-                {% for header in headers %}
-                <th>{{ header }}</th>
-                {% endfor %}
-            </thead>
-                <tr>
-                    {% for image in images %}
-                    <td><img class="image" src="{{ image }}"></td>
-                    {% endfor %}
-                    {% for item in row %}
-                    <td>{{ item }}</td>
-                    {% endfor %}
-                </tr>
-        </table>
+        <img class="picture" src="{{ data["image"] }}">
+        <div class="name">
+            <name>{{ data["name"] }}</name>
+            <br>
+            <br>
+            <br>
+            <br>
+            <img style="border-radius: 25px;float: left;" src="{{ data["host_image"] }}"><p style="padding-left: 60px">Hosted by {{ data["host_name"] }}</p>
+        </div>
     </body>
 
 </html>

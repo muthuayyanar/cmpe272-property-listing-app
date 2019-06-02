@@ -223,6 +223,11 @@ def houselistings(pagenumber=1):
 @requires_auth
 def listing_details(listing_id):
     home = home_listings.find({"id" : int(listing_id) })[0]
+    data = {}
+    data["image"] = home["picture_url"]
+    data["name"] = home["name"]
+    data["host_image"] = home["host_thumbnail_url"]
+    data["host_name"] = home["host_name"]
     row = []
     headers = []
     excluded = ["", "N/A", "_id"]
@@ -235,7 +240,7 @@ def listing_details(listing_id):
         elif not(str(home[key]) in excluded or key in excluded) and str(home[key]) not in row:
             headers.append(key)
             row.append(str(home[key]))
-    return render_template("listing_details.html", imageheaders=imageheaders, headers=headers, images=images, row=row)
+    return render_template("listing_details.html", data=data, imageheaders=imageheaders, headers=headers, images=images, row=row)
 
 if __name__ == '__main__':
     app.run(debug=True)
