@@ -216,7 +216,7 @@ def houselistings(pagenumber=1):
         count+=1
     rows.pop(0)
     user_id = session[constants.JWT_PAYLOAD].get('sub', '0|0').split("|")[1]
-    return render_template("listings.html", rows=rows, userinfo=session[constants.PROFILE_KEY], userid=user_id)
+    return render_template("listings.html", rows=rows, userinfo=session[constants.PROFILE_KEY], userid=user_id, pagenumber=pagenumber)
 
 
 @app.route("/listing/<listing_id>")
