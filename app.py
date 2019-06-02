@@ -243,4 +243,4 @@ def listing_details(listing_id):
     return render_template("listing_details.html", data=data, imageheaders=imageheaders, headers=headers, images=images, row=row)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
