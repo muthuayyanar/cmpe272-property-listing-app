@@ -1,0 +1,11 @@
+flask
+pymongo
+jwt
+authlib
+python-dotenv
+
+[test]
+mongomock
+pytest
+pytest-cov
+coverage
