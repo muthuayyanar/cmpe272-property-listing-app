@@ -1,6 +1,6 @@
 # cmpe272-property-listing-app
 
-Install
+## Install
 
 This application is optimized to work in Python3, check to see if you have python3 on your host
 
