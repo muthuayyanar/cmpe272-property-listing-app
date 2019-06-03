@@ -224,6 +224,18 @@ def houselistings(pagenumber=1):
 def listing_details(listing_id):
     home = home_listings.find({"id" : int(listing_id) })[0]
     data = {}
+    dates = [None]*30
+    cal = []
+    alldates = calendar.find({"listing_id" : int(listing_id)})
+    for date in alldates:
+        datestring = date["data"]
+        year, month, day = datestring.split("-")
+        if int(year)==2019 and 5 < int(month) < 7:
+            if date["available"] == "t":
+                dates[int(day)-1] = "active"
+            else:
+                dates[int(day)-1] = "notactive"
+                
     data["image"] = home["picture_url"]
     data["name"] = home["name"][:45]
     data["host_image"] = home["host_thumbnail_url"]
@@ -234,19 +246,8 @@ def listing_details(listing_id):
     data["bedrooms"] = home["bedrooms"]
     data["address"] = home["street"]
     data["price"] = home["price"]
-    row = []
-    headers = []
-    excluded = ["", "N/A", "_id"]
-    imageheaders = []
-    images = []
-    for key in home.keys():
-        if "http" in str(home[key]) and (key!="host_url" and key!="listing_url"):
-            imageheaders.append(key)
-            images.append(home[key])
-        elif not(str(home[key]) in excluded or key in excluded) and str(home[key]) not in row:
-            headers.append(key)
-            row.append(str(home[key]))
-    return render_template("listing_details.html", userinfo=session[constants.PROFILE_KEY], userid=session[constants.JWT_PAYLOAD].get('sub', '0|0').split("|")[1], data=data, imageheaders=imageheaders, headers=headers, images=images, row=row)
+    data["dates"] = dates
+    return render_template("listing_details.html", userinfo=session[constants.PROFILE_KEY], userid=session[constants.JWT_PAYLOAD].get('sub', '0|0').split("|")[1], data=data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
