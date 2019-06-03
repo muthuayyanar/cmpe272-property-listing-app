@@ -200,7 +200,7 @@ def listings():
 @requires_auth
 def houselistings(pagenumber=1):
     rows = []
-    start = int(pagenumber)*20 - 20
+    start = int(pagenumber)*10 - 10
     count = 0
     for document in home_listings.find({}):
         if count>=start:
@@ -211,7 +211,7 @@ def houselistings(pagenumber=1):
             temprow.append(document["street"])
             temprow.append(document["id"])
             rows.append(temprow)
-        if count==start+20:
+        if count==start+10:
             break
         count+=1
     rows.pop(0)
@@ -225,9 +225,15 @@ def listing_details(listing_id):
     home = home_listings.find({"id" : int(listing_id) })[0]
     data = {}
     data["image"] = home["picture_url"]
-    data["name"] = home["name"]
+    data["name"] = home["name"][:45]
     data["host_image"] = home["host_thumbnail_url"]
     data["host_name"] = home["host_name"]
+    data["review"] = reviews.find({"listing_id" : int(listing_id) })[0]["comments"]
+    data["review_name"] = reviews.find({"listing_id" : int(listing_id) })[0]["reviewer_name"]
+    data["bathrooms"] = home["bathrooms"]
+    data["bedrooms"] = home["bedrooms"]
+    data["address"] = home["street"]
+    data["price"] = home["price"]
     row = []
     headers = []
     excluded = ["", "N/A", "_id"]
@@ -240,7 +246,7 @@ def listing_details(listing_id):
         elif not(str(home[key]) in excluded or key in excluded) and str(home[key]) not in row:
             headers.append(key)
             row.append(str(home[key]))
-    return render_template("listing_details.html", data=data, imageheaders=imageheaders, headers=headers, images=images, row=row)
+    return render_template("listing_details.html", userinfo=session[constants.PROFILE_KEY], userid=session[constants.JWT_PAYLOAD].get('sub', '0|0').split("|")[1], data=data, imageheaders=imageheaders, headers=headers, images=images, row=row)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

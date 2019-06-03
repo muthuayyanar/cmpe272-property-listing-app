@@ -1,40 +1,136 @@
 <html>
-    <style>
-        table, td, th {
-            border: 1px solid black;
-        }
 
-        td {
-            vertical-align: top;
-        }
-        .picture {
-            border-radius: 10px;
-            float: right;
-            height: 500px;
-            width: 60%;
-        }
-        .name {
-            background-color: #EEEEEE;
-            float: left;
-            height: 460px;
-            width: 36%;
-            border-radius: 10px;
-            padding: 20px;
-        }
-        name {
-            font-size: 81px
-        }
-    </style>
-    <body>
-        <img class="picture" src="{{ data["image"] }}">
-        <div class="name">
-            <name>{{ data["name"] }}</name>
-            <br>
-            <br>
-            <br>
-            <br>
-            <img style="border-radius: 25px;float: left;" src="{{ data["host_image"] }}"><p style="padding-left: 60px">Hosted by {{ data["host_name"] }}</p>
+<head>
+    <title>AMK Properties</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AMK Property Listings" />
+    <meta name="author" content="Team AMK" />
+
+    <link rel="icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/resources/css/default.css" />
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+</head>
+
+<style>
+    table,
+    td,
+    th {
+        border: 1px solid black;
+    }
+
+    td {
+        vertical-align: top;
+    }
+
+    .picture {
+        border-radius: 10px;
+        float: right;
+        height: 600px;
+        width: 60%;
+    }
+
+    .name {
+        background-color: #EEEEEE;
+        float: left;
+        height: 600px;
+        width: 36%;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .review {
+        float: right;
+        width: 60%;
+        padding: 20px;
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+
+    .details {
+        float: left;
+        width: 36%;
+        padding: 20px;
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+
+    .bg-light {
+        background-color: #cfebff !important;
+        opacity: 0.97;
+    }
+
+    name {
+        word-break: break-word;
+        font-size: 64px
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-light">
+        <a style="color: black" class="navbar-brand" href="/listings"><img class="companylogo hidden-xs" alt=""
+                src="/static/logo.webp" style="height: 20px"/>AMK Properties</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                </li>
+            </ul>
         </div>
-    </body>
+
+        {% if userinfo %}
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                <a style="padding-top: 14px; color:black" class="nav-link" href="/logout"><span
+                        class="fas fa-signout-alt"></span> Logout</a>
+            </li>
+            <li>
+                <div class="photo-outer hidden-xs"><img style="height:50px; border-radius: 10px" class="user-photo"
+                        src="{{userinfo['picture']}}" alt="{{userinfo['name']}}" title="{{userinfo['name']}}" /></div>
+            </li>
+        </ul>
+        {% endif %}
+
+        {% if not userinfo %}
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                <a class="nav-link" href="/login"><span class="fas fa-signin-alt"></span> Login</a>
+            </li>
+        </ul>
+        {% endif %}
+    </nav>
+    <img style="margin-top: 75px; margin-right: 10px" class="picture" src="{{ data["image"] }}">
+    <div style="margin-top: 75px; margin-left: 10px; text-overflow: ellipsis;" class="name">
+        <name>{{ data["name"] }}</name>
+        <div style="margin-top: 30px">
+            <img style="border-radius: 25px; float: left;" src="{{ data["host_image"] }}">
+            <p style="padding-left: 60px; padding-top: 12.5px">Hosted by {{ data["host_name"] }}</p>
+            <br>
+            <h5>{{ data["price"] }}/night</h5>
+        </div>
+    </div>
+    <div align="center" class="details">
+        <p style="font-size: 24px;float:left; margin-right:10%">Bedrooms: <b>{{ data["bedrooms"] }}</b></p>
+        <p style="font-size: 24px">Bathrooms: <b>{{ data["bathrooms"] }}</b></p>
+        <br>
+        <p style="font-size: 24px">@{{ data["address"] }}</p>
+    </div>
+    <div class="review">
+        <p style="font-style: italic">" {{ data["review"] }} "</p>
+        <p>- {{ data["review_name"] }} </p>
+    </div>
+</body>
 
 </html>

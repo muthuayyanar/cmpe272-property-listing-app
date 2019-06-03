@@ -8,8 +8,8 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AMK Bookstore" />
-  <meta name="author" content="Karthik Ramasamy" />
+  <meta name="description" content="AMK Property Listings" />
+  <meta name="author" content="Team AMK" />
 
   <link rel="icon" href="/favicon.ico" />
   
@@ -24,7 +24,8 @@
 
   <style>
       .bg-light {
-          opacity: .7;
+          background-color: #cfebff !important;
+          opacity: .97;
       }
   </style>
 </head>
@@ -33,7 +34,7 @@
   <div class="container">
     <div class="container">
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-light">
-        <a style="color: black" class="navbar-brand" href="/"><img class="companylogo hidden-xs" alt="" src="" />AMK Properties</a>
+        <a style="color: black" class="navbar-brand" href="/"><img class="companylogo hidden-xs" alt="" src="/static/logo.webp" style="height: 20px" />AMK Properties</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
@@ -55,13 +56,13 @@
         {% if not userinfo %}
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
-                    <a style="padding-top: 14px; color:black" class="nav-link" href="/login"><span class="fas fa-signin-alt"></span> Login</a>
+                    <a style="color:black" class="nav-link" href="/login"><span class="fas fa-signin-alt"></span> Login</a>
             </li>
         </ul>
     {% endif %}
       </nav>
 
-      <div style="padding-top: 100px"class="container">
+      <div align="center" style="padding-top: 100px;width: 60%" class="container">
         <div class="jumbotron">
           <h3>Welcome to AMK Property Listings!</h3>
           <br />
