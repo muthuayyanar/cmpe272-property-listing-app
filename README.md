@@ -50,4 +50,4 @@ PS: Application has been tested to work with Python2 as well, but recommend to r
   
   `` http://localhost:5000 ``
   
-  6.Use the login option and use Google credential to enter the property listings
+  6.Use the login option and use Google credential to enter the property listings. Alternatively a user ID/password can be created using the signup option to get authenticated using the local authentication infra provided by Auth0.
