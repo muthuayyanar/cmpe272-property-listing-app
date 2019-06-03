@@ -228,14 +228,14 @@ def listing_details(listing_id):
     cal = []
     alldates = calendar.find({"listing_id" : int(listing_id)})
     for date in alldates:
-        datestring = date["data"]
+        datestring = date["date"]
         year, month, day = datestring.split("-")
         if int(year)==2019 and 5 < int(month) < 7:
             if date["available"] == "t":
                 dates[int(day)-1] = "active"
             else:
                 dates[int(day)-1] = "notactive"
-                
+
     data["image"] = home["picture_url"]
     data["name"] = home["name"][:45]
     data["host_image"] = home["host_thumbnail_url"]
