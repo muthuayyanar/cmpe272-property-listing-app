@@ -32,10 +32,15 @@ PS: Application has been tested to work with Python2 as well, but recommend to r
   3.Add the below environment variable 
   
 `` export AUTH0_CLIENT_SECRET=zanf_QAUm_33ibOWePe3zmoH-xgEp938j3zrg1wAqTR_EFCzCIsb0Q0J7wrdYNU2 ``
+
 `` export AUTH0_AUDIENCE=https://airbnb/teamamk ``
+
 `` export AUTH0_DOMAIN=dev-0jevmotu.auth0.com ``
+
 `` export AUTH0_CLIENT_ID=ozDfTCN8qGlGLx7JhfmRizpdye6cxeR4 ``
+
 `` export AUTH0_CALLBACK_URL=http://localhost:5000/callback ``
+
   
   4.Run the below command to start the application
   
