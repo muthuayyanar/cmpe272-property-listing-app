@@ -45,3 +45,9 @@ PS: Application has been tested to work with Python2 as well, but recommend to r
   4.Run the below command to start the application
   
   `` python3 app.py ``
+  
+  5.Use a browser to access the below URL after confirming that there are no issues running the above applcation and host is listening on port 5000
+  
+  `` http://localhost:5000 ``
+  
+  6.Use the login option and use Google credential to enter the property listings
